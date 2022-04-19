@@ -1,6 +1,6 @@
 import Client
-
-prems = Client.Client()
+if __name__=="__main__":
+    prems = Client.Client()
 
 
 def add(x,y):
