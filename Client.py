@@ -5,12 +5,12 @@ import threading as th
 class Client:
     run = True
 
-    def __init__(self,port):
+    def __init__(self,port,name,matricules):
         #rajouter exeption pour les int
         self.s = socket.socket()
         request = "subscribe"
-        name = "justUnTest"
-        matricules = ["12345", "67890"]
+        #name = "justUnTest"
+        #matricules = ["12345", "67890"]
         self.config(request,port,name,matricules)
 
     def config(self,request,port, name,matricules):
@@ -22,8 +22,8 @@ class Client:
         self.s.connect(adresseServor)
         invitation = json.dumps(jsonDico)
         self.s.send(invitation.encode())
-        threadEcoute = th.Thread(target = self.ecoute)
-        threadEcoute.start()
+        self.threadEcoute = th.Thread(target = self.ecoute)
+        self.threadEcoute.start()
 
     def ecoute(self):
         while self.run:
@@ -34,13 +34,18 @@ class Client:
                 print(reponse)
             else :
                 reponse = {}
+                print("octet0")
+                self.run = False
             if 'reponse' in reponse.keys():
                 if reponse['reponse'] == 'ok':
-                    pass
+                    print("OK")
                 if reponse['reponse']== 'ping':
                     self.s.send(json.dumps({'reponse':'pong'}).encode())
             if 'request' in reponse.keys():
                 if reponse['request'] =='play':
                     self.s.send(json.dumps({'reponse':'giveup'}).encode())
+
     def fin(self):
+        self.run = False
+        self.threadEcoute.join()
         self.s.close()
