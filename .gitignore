@@ -4,3 +4,4 @@ __pycache__/first.cpython-37.pyc
 __pycache__/test_first.cpython-37-PYTEST.pyc
 __pycache__/Client.cpython-37.pyc
 __pycache__/Client.cpython-37.pyc
+*.pyc
