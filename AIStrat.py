@@ -1,5 +1,6 @@
 directionList = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
 def movePossibles(board):
+    #ATTENTION: bad move
     #board[0] contient ses pieces
     #board[1] contient les piece de sont adversaire
     #return une list
@@ -26,6 +27,7 @@ def moveInMovesList(movesList,move):
 
 
 def coup(case, direction, point ,board):
+    # problem avec la iteration depasse la limite de python (plus que 100)
     caseRech = (caseDacote(case,direction))
     if(caseRech in board[1]):
         return coup(caseRech,direction, point+1,board)

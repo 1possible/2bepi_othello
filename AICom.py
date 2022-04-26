@@ -1,6 +1,8 @@
 import json
 import socket
 import threading as th
+import AIStrat
+import random
 
 class AICom:
     run = True
@@ -79,7 +81,12 @@ class AICom:
         #    "move": the_move_played, #doit etre un int
         #    "message": "Fun message"
         #}
-        return {'response':'giveup'}
+        if dicGame["state"]["players"][0] == self.name:
+            board = dicGame["state"]["board"]
+        else:
+            board = [dicGame["state"]["board"][1],dicGame["state"]["board"][0]]
+        move = random.choice(AIStrat.movePossibles(board))
+        return {"response": "move","move": move[0],"message": "aléatoire"}
 
     def fin(self):
         self.run = False
