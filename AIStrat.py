@@ -1,4 +1,28 @@
 directionList = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
+def movePossibles(board):
+    #board[0] contient ses pieces
+    #board[1] contient les piece de sont adversaire
+    #return une list
+    #       contenant les coup possible sous forme de list: comme
+    #           le element 0: la case du move
+    #           le element 1: le nombre de piece prise avec ce coup
+    movesList = []
+    for pion in board[0]:
+        for direction in directionList:
+            isACoup = coup(pion,direction,0,board)
+            if isACoup is not False:
+                movesList = moveInMovesList(movesList,isACoup)
+    return movesList
+
+def moveInMovesList(movesList,move):
+    isAmoveDouble = False
+    for i in range(len(movesList)):
+        if move[0] == movesList[i][0]:
+            isAmoveDouble = True
+            movesList[i][1] += move[1]
+    if(isAmoveDouble)== False:
+        movesList.append(move)
+    return movesList
 
 
 def coup(case, direction, point ,board):
