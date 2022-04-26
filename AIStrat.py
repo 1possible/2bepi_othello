@@ -1,7 +1,18 @@
-direction = {(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)}
-#def movePossibles(board):
-#    for pion in board[0]:
+directionList = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
 
+
+def coup(case, direction, point ,board):
+    caseRech = (caseDacote(case,direction))
+    if(caseRech in board[1]):
+        return coup(caseRech,direction, point+1,board)
+    elif(caseRech in board[0]):
+        return False
+    else:
+        if point == 0 :
+            return False
+        else:
+            return [caseRech, point]
+    #(caseMove , pience prise)
 
 def caseDacote(case, direction):
     c = case%8

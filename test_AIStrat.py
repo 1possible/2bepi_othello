@@ -9,3 +9,9 @@ def test_caseDacote():
     assert AIStrat.caseDacote(23, (1, 1)) == False
     assert AIStrat.caseDacote(40, (-1, 1)) == False
     assert AIStrat.caseDacote(60, (0, 1)) == False
+
+def test_coup():
+    assert AIStrat.coup(28,(-1,0),0,[[28, 35],[27, 36]]) == [26,1]
+    assert AIStrat.coup(28, (1, 0), 0, [[28, 35], [27, 36]]) == False
+    assert AIStrat.coup(36,(-1,-1),0,[[26,28,36,44],[18,27,35,43]]) == [9,2]
+    assert AIStrat.coup(28, (-1, 0), 0, [[26, 28, 36, 44], [18, 27, 35, 43]]) == False
