@@ -6,6 +6,7 @@ class AICom:
     run = True
 
     def __init__(self,port,name,matricules):
+        #fonction qui initialise les variables du programme
         #rajouter exeption pour les int
         # name = "justUnTest"
         # matricules = ["12345", "67890"] #obliger d'avoir different matricule pour plusieur client
@@ -19,6 +20,8 @@ class AICom:
 
 
     def inscription(self):
+        #fonction qui inscrit le programme à l'adresse (adresseServeurRunner)
+        # si il arrive a s'inscrire il lance la fonction "ecoute"
         with socket.socket() as sInscription:
             #faire fonction si jamais il arrive pas a ce connecter
             jsonDico = {"request": "subscribe", "port": self.port, "name": self.name, "matricules": self.matricules}
@@ -35,6 +38,9 @@ class AICom:
                 print(self.name + "inscriptionError : "+reponseInscription['error'])
 
     def ecoute(self):
+        #fonction qui s'occupe des request envoye par le serveur
+        #repond a ping par pong
+        #lance play quand il recoit la requet move
         with socket.socket() as sAIServor:
             sAIServor.bind(self.adresse)
             while self.run:
@@ -73,7 +79,6 @@ class AICom:
         #    "move": the_move_played, #doit etre un int
         #    "message": "Fun message"
         #}
-
         return {'response':'giveup'}
 
     def fin(self):
