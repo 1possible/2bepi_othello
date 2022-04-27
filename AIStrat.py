@@ -11,7 +11,7 @@ def movePossibles(board):
     for pion in board[0]:
         for direction in directionList:
             isACoup = coup(pion,direction,0,board)
-            if isACoup is not False:
+            if isACoup is not None:
                 movesList = moveInMovesList(movesList,isACoup)
     return movesList
 
@@ -29,13 +29,15 @@ def moveInMovesList(movesList,move):
 def coup(case, direction, point ,board):
     # problem avec la iteration depasse la limite de python (plus que 100)
     caseRech = (caseDacote(case,direction))
-    if(caseRech in board[1]):
+    if caseRech is None:
+        return None
+    elif(caseRech in board[1]):
         return coup(caseRech,direction, point+1,board)
     elif(caseRech in board[0]):
-        return False
+        return None
     else:
         if point == 0 :
-            return False
+            return None
         else:
             return [caseRech, point]
     #(caseMove , pience prise)
@@ -44,8 +46,8 @@ def caseDacote(case, direction):
     c = case%8
     l = case//8
     if ((c == 0 and direction[0]==-1) or (c==7 and direction[0] == 1)):
-        return False
+        return None
     elif ((l == 0 and direction[1]==-1) or (l==7 and direction[1] == 1)):
-        return False
+        return None
     else :
         return (l + direction[1])*8 + c+direction[0]
