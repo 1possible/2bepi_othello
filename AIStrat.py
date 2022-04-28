@@ -1,3 +1,5 @@
+import random
+
 directionList = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
 def movePossibles(board):
     #ATTENTION: bad move
@@ -51,3 +53,10 @@ def caseDacote(case, direction):
         return None
     else :
         return (l + direction[1])*8 + c+direction[0]
+
+def aleatoireCoup(board):
+    movesList = movePossibles(board)
+    if len(movesList) == 0:
+        return None
+    else:
+        return random.choice(movesList)[0]

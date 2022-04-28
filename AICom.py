@@ -2,7 +2,6 @@ import json
 import socket
 import threading as th
 import AIStrat
-import random
 
 class AICom:
     run = True
@@ -85,10 +84,10 @@ class AICom:
             board = dicGame["state"]["board"]
         else:
             board = [dicGame["state"]["board"][1],dicGame["state"]["board"][0]]
-        move = random.choice(AIStrat.movePossibles(board))
-        return {"response": "move","move": move[0],"message": "aléatoire"}
+        move = AIStrat.aleatoireCoup(board)
+        return {"response": "move","move": move,"message": "aléatoire"}
 
-    def fin(self):
-        self.run = False
-        self.threadEcoute.join() #je sais pas si c'est une bonne idée de le mettre
+    #def fin(self):
+        #self.run = False
+        #self.threadEcoute.join() #je sais pas si c'est une bonne idée de le mettre
         # car le theads s'arrete que quand un message arrive car il est bloqué a attendre un message
