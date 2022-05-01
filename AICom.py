@@ -7,7 +7,7 @@ class AICom:
     run = True
 
     def __init__(self,port,name,matricules):
-        #fonction qui initialise les variables du programme
+        #fonction qui initialise les variables du programme et lance l'inscription
         #rajouter exeption pour les int
         # name = "justUnTest"
         # matricules = ["12345", "67890"] #obliger d'avoir different matricule pour plusieur client
@@ -65,6 +65,7 @@ class AICom:
         #        if reponse['reponse']== 'ping':
         #            self.s.send(json.dumps({'reponse':'pong'}).encode())
     def play(self,dicGame):
+        #fonction qui s'occupe de renvoyé une reponse de la request move sous forme de dictionnaire
         #exemple dicGame
         #{'request': 'play',
         # 'lives': 3,

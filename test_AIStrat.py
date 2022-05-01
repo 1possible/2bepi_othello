@@ -11,10 +11,10 @@ def test_caseDacote():
     assert AIStrat.caseDacote(60, (0, 1)) is None
 
 def test_coup():
-    assert AIStrat.coup(28,(-1,0),0,[[28, 35],[27, 36]]) == [26,1]
-    assert AIStrat.coup(28, (1, 0), 0, [[28, 35], [27, 36]]) is None
-    assert AIStrat.coup(36,(-1,-1),0,[[26,28,36,44],[18,27,35,43]]) == [9,2]
-    assert AIStrat.coup(28, (-1, 0), 0, [[26, 28, 36, 44], [18, 27, 35, 43]]) is None
+    assert AIStrat.coup(28,(-1,0),[[28, 35],[27, 36]]) == [26,1]
+    assert AIStrat.coup(28, (1, 0), [[28, 35], [27, 36]]) is None
+    assert AIStrat.coup(36,(-1,-1),[[26,28,36,44],[18,27,35,43]]) == [9,2]
+    assert AIStrat.coup(28, (-1, 0), [[26, 28, 36, 44], [18, 27, 35, 43]]) is None
 
 def test_moveInMovesList():
     assert AIStrat.moveInMovesList([[9,3],[4,1],[20,2]],[9,1]) == [[9,4],[4,1],[20,2]]
