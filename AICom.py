@@ -1,7 +1,7 @@
 import json
 import socket
 import threading as th
-import AIStrat
+import First_strategy
 
 class AICom:
     run = True
@@ -85,7 +85,7 @@ class AICom:
             board = dicGame["state"]["board"]
         else:
             board = [dicGame["state"]["board"][1],dicGame["state"]["board"][0]]
-        move = AIStrat.aleatoireCoup(board)
+        move = First_strategy.Strat(board)
         return {"response": "move","move": move,"message": "aléatoire"}
 
     #def fin(self):
