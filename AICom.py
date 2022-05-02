@@ -97,6 +97,9 @@ class AICom:
         if self.strat == "m":
             move = First_strategy.Strat(board)
             message = "minmax"
+        elif self.strat == "f":
+            move = AIStrat.bestCoupInThemoment(board)
+            message ="sur le coup ca me parait une bonne idee"
         else :
             move =AIStrat.aleatoireCoup(board)
             message = "aleatoire"

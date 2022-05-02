@@ -95,6 +95,46 @@ def caseDacote(case, direction):
     else :
         return (l + direction[1])*8 + c+direction[0]
 
+def moveWithMaxPoint(listMove):
+    #renvoie la place dans la listMove du coup avec le plus de point
+    #Parametre:
+    #   listMove: une liste des moves
+    #           les moves possible sont sous forme de liste à 2 éléments
+    #               l'élément 0: int: la case du move
+    #               l'élément 1: int: le nombre de piece prise avec ce move
+    #Return:
+    #   si liste est vide
+    #       None
+    #   Sinon
+    #       int: place dans la listMove du coup avec le plus de point
+    placeMoveInList = None
+    for i in range(len(listMove)):
+        if placeMoveInList is None:
+            placeMoveInList = i
+        else:
+            if listMove[i][1]>listMove[placeMoveInList][1]:
+                placeMoveInList = i
+    return placeMoveInList
+
+def bestCoupInThemoment(board):
+    #renvoie la case du move qui rapport le plus de point dans les coups possible ce tour ci (ne prend rien d'autre en compte)
+    #Parametre:
+    #   board: list a 2 élément
+    #           board[0]:liste qui contient les cases de ses pieces
+    #           board[1]:liste qui contient les cases des piece de son adversaire
+    # Return:
+    #   si il n'y a pas de mouvement possible
+    #       None
+    #   sinon
+    #       int: chiffre de 0 à 63 correspondant une case du move qui rapport le plus de point
+
+    moveList = movePossibles(board)
+    placeMoveInList = moveWithMaxPoint(moveList)
+    if placeMoveInList == None:
+        return placeMoveInList
+    else:
+        return moveList[placeMoveInList][0]
+
 def aleatoireCoup(board):
     #renvoie la case d'un move aléatoire dans tout ceux disponible
     #Parametre:
@@ -102,7 +142,7 @@ def aleatoireCoup(board):
     #           board[0]:liste qui contient les cases de ses pieces
     #           board[1]:liste qui contient les cases des piece de son adversaire
     #Return:
-    #   si il y a pas de mouvement possible
+    #   si il n'y a pas de mouvement possible
     #       None
     #   sinon
     #       int: chiffre de 0 à 63 correspondant une case d'un move possible
