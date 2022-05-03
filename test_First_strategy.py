@@ -1,5 +1,8 @@
 import First_strategy
 
+def test_apply():
+    plateauSuccesseur = First_strategy.apply([44,1], [[28, 35], [27, 36]])
+    assert set(plateauSuccesseur[0]) == {28,35,36,44} and set(plateauSuccesseur[1]) =={27}
 
 def test_gameOver ():
 	assert First_strategy.gameOver(
@@ -14,3 +17,4 @@ def test_utility():
 
 	assert First_strategy.utility ([[0,8,16,24,32,40,48,56,57,58,59,60,61,62,63,9,17,25,33,41,49,18,27,36,45,54,63,61,52,43,34],
 	[2,3,4,5,6,7,10,11,12,13,14,15,19,20,21,22,23,28,29,30,31,26,37,38,39,35,46,47,44,42,55,53,50,51]]) == -1
+
