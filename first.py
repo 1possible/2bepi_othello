@@ -6,5 +6,7 @@ if __name__=="__main__":
     ter = AICom.AICom(8881, "firstCoup1", ["14545", "67780"],'f')
     quar = AICom.AICom(8882,"firstCoup2", ["98765","14758"],'f')
     #same = AICom.AICom(8884, "firstCoup3", ["98763", "14753"],'f')
+    pent = AICom.AICom(8885, "mine1", ["14555", "67555"], 'n')
+    hex = AICom.AICom(8886, "mine2", ["98666", "14666"], 'n')
 
 

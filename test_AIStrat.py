@@ -30,6 +30,10 @@ def test_moveWithMaxPoint():
     assert AIStrat.moveWithMaxPoint([[9,4],[4,1],[20,2]]) == 0
     assert AIStrat.moveWithMaxPoint([]) is None
 
+def test_moveWithMinPoint():
+    assert AIStrat.moveWithMinPoint([[9,4],[4,1],[20,2]]) == 1
+    assert AIStrat.moveWithMinPoint([]) is None
+
 def test_bestCoupInTheMoment():
     assert AIStrat.bestCoupInThemoment(
         [[10, 11, 17, 20, 22, 25, 28, 30, 33, 34, 36, 37, 38, 41, 43, 44, 45, 46, 49, 50, 51, 52, 57, 58],

@@ -100,6 +100,9 @@ class AICom:
         elif self.strat == "f":
             move = AIStrat.bestCoupInThemoment(board)
             message ="sur le coup ca me parait une bonne idee"
+        elif self.strat == "n":
+            move = AIStrat.strategieDuMoinsDePion(board)
+            message ="le moins de pion"
         else :
             move =AIStrat.aleatoireCoup(board)
             message = "aleatoire"
