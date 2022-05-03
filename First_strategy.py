@@ -6,7 +6,7 @@ def MAX (board,player):
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board):
-		return utility(board)#, None
+		return utility(board), None
 
 
 	else:
@@ -16,7 +16,7 @@ def MAX (board,player):
 
 		for move in movesList:
 			successor = apply(move,board)
-			score,_ = MIN(successor,1)
+			score,_ = MIN([successor[1],successor[0]],1)
 			if score > meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -29,10 +29,10 @@ def MAX (board,player):
 def MIN (board,player):
 
 
-	movesList_Adv = AIStrat.movePossibles([board[1],board[0]])
+	movesList_Adv = AIStrat.movePossibles(board)
 
 	if gameOver(board):
-		return utility(board)#, None
+		return utility(board), None
 
 
 	else:
@@ -42,7 +42,7 @@ def MIN (board,player):
 
 		for move in movesList_Adv:
 			successor = apply(move, board)
-			score,_ = MAX(successor,1)
+			score,_ = MAX([successor[1],successor[0]],1)
 			if score < meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -97,7 +97,12 @@ def utility (board):
 def Strat (board):
 	return MAX(board,0)
 
-print(Strat([[28, 35],[27, 36]]))
+print(Strat([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+         [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
+          45, 46, 49, 50, 53, 54, 55, 62, 63]]))
+print(Strat([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
+          45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+         ]))
 
 
 
