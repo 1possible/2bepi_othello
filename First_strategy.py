@@ -94,8 +94,47 @@ def utility (board):
 		return -1
 
 
+def heuristic(board):
+
+	if gameOver(board):
+
+		if len (board[0]) > len (board[1]):
+			return float("inf")
+
+		else: 
+			return float ("-inf")
+
+	h=0
+	if len(board[0])+len(board[1]) >25:
+		h += len (board[0]) - len(board[1])
+	pionIntouchable = 0
+	for pion in board[0]:
+		if(AIStrat.pionIntouchable(pion,board)):
+			pionIntouchable+=1
+	h+=pionIntouchable
+
+
+
+	
+		
+
+
+	
+
+
+
+
+
+
+
+
+
+
 def Strat (board):
 	return MAX(board,0)
+
+
+
 
 print(Strat([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
          [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
