@@ -14,7 +14,7 @@ def MAX (board,player):
 		meilleur_coup= None
 		meilleur_score= float ("-inf")
 
-		for move in movesList:
+		for move in movesList[0]:
 			successor = apply(move,board)
 			score,_ = MIN([successor[1],successor[0]],1)
 			if score > meilleur_score :
@@ -40,7 +40,7 @@ def MIN (board,player):
 		meilleur_coup= None
 		meilleur_score= float ("inf")
 
-		for move in movesList_Adv:
+		for move in movesList_Adv[0]:
 			successor = apply(move, board)
 			score,_ = MAX([successor[1],successor[0]],1)
 			if score < meilleur_score :
@@ -65,11 +65,11 @@ def apply(move, board):
 	boardJ = set(board[0])
 	boardA = set(board[1])
 	for dir in AIStrat.directionList:
-		pieceCapture = caseCatch(move[0],dir,board,[])
+		pieceCapture = caseCatch(move,dir,board,[])
 		for piece in pieceCapture:
 			boardJ.add(piece)
 			boardA.remove(piece)
-	boardJ.add(move[0])
+	boardJ.add(move)
 	return [list(boardJ), list(boardA)]
 
 
@@ -137,7 +137,7 @@ def Strat (board):
 
 
 print(Strat([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-         [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
+        [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
           45, 46, 49, 50, 53, 54, 55, 62, 63]]))
 print(Strat([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
           45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],

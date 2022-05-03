@@ -120,6 +120,7 @@ class AICom:
 #    parser.add_argument('AIName', help='The name of the game')
 #    parser.add_argument('-p', '--port', type=int, help='The port the program use to listen for request from the serverRunner', default=3000)
 #    parser.add_argument('-AI', '--aiStrat', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax', default='m')
+#    parser.add_argument('-s', '--servor', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax', default='127.0.0.1')
 #    args = parser.parse_args()
 
-#    AICom(args.port, args.AIName, args.aiStrat)
+#    AICom(args.port, args.AIName, args.aiStrat, args.servor)
