@@ -42,6 +42,29 @@ def MIN (board):
 		
 		return meilleur_score, meilleur_coup
 
+def caseCatch(case,dir, board, listPiece):
+	case = AIStrat.caseDacote(case,dir)
+	if case in board[1]:
+		listPiece.append(case)
+		return caseCatch(case, dir, board, listPiece)
+	elif case in board[0]:
+		return listPiece
+	elif case is None:
+		return []
+	else:
+		return []
+
+def apply(move, board):
+	boardJ = set(board[0])
+	boardA = set(board[1])
+	for dir in AIStrat.directionList:
+		pieceCapture = caseCatch(move,dir,board,[])
+		for piece in pieceCapture:
+			boardJ.add(piece)
+			boardA.remove(piece)
+	boardJ.add(move)
+	return [list(boardJ), list(boardA)]
+
 
 
 
