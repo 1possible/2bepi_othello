@@ -1,15 +1,6 @@
 import random
 
 directionList = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
-def changeStyleMove(listMove):
-    if len(listMove)>0:
-        nLmove = [[],[]]
-        for move in listMove:
-            nLmove[0].append(move[0])
-            nLmove[1].append(move[1])
-        return nLmove
-    else:
-        return []
 
 
 def movePossibles(board):
@@ -23,15 +14,15 @@ def movePossibles(board):
     #       les moves possible sont sous forme de liste à 2 éléments
     #           l'élément 0: int: la case du move
     #           l'élément 1: int: le nombre de piece prise avec ce move
-    movesList = []
+    movesList = [[],[]]
     for pion in board[0]:
         for direction in directionList:
-            isACoup = coup(pion,direction,board)
+            isACoup, pointCoup = coup(pion,direction,board)
             if isACoup is not None:
-                movesList = moveInMovesList(movesList,isACoup)
+                movesList = moveInMovesList(movesList,isACoup,pointCoup)
     return movesList
 
-def moveInMovesList(movesList,newMove):
+def moveInMovesList(movesList,newMove, pointMove):
     #rajoute un move a une liste de moves
     # en prenant en compte si il y a une autre move sur la même case
     # dans ce cas il rajoute les points  du newMove a celui existant
@@ -46,12 +37,14 @@ def moveInMovesList(movesList,newMove):
     #   movesList avec le nouveau move rajouté
 
     isAmoveDouble = False
-    for i in range(len(movesList)):
-        if newMove[0] == movesList[i][0]:
+    for i in range(len(movesList[0])):
+        if newMove == movesList[0][i]:
             isAmoveDouble = True
-            movesList[i][1] += newMove[1]
+            movesList[1][i] += pointMove
     if(isAmoveDouble)== False:
-        movesList.append(newMove)
+        movesList[0].append(newMove)
+        movesList[1].append(pointMove)
+
     return movesList
 
 
@@ -74,16 +67,16 @@ def coup(case, direction, board, point =0):
     #                le element 1: int :le nombre de piece prise avec ce move
     caseRech = (caseDacote(case,direction))
     if caseRech is None:
-        return None
+        return None, None
     elif(caseRech in board[1]):
         return coup(caseRech,direction, board, point+1)
     elif(caseRech in board[0]):
-        return None
+        return None, None
     else:
         if point == 0 :
-            return None
+            return None, None
         else:
-            return [caseRech, point]
+            return caseRech, point
     #(caseMove , pience prise)
 
 def caseDacote(case, direction):
@@ -119,11 +112,11 @@ def moveWithMaxPoint(listMove):
     #   Sinon
     #       int: place dans la listMove du coup avec le plus de point
     placeMoveInList = None
-    for i in range(len(listMove)):
+    for i in range(len(listMove[0])):
         if placeMoveInList is None:
             placeMoveInList = i
         else:
-            if listMove[i][1]>listMove[placeMoveInList][1]:
+            if listMove[1][i]>listMove[1][placeMoveInList]:
                 placeMoveInList = i
     return placeMoveInList
 
@@ -140,13 +133,16 @@ def moveWithMinPoint(listMove):
     #   Sinon
     #       int: place dans la listMove du coup avec le moins de point
     placeMoveInList = None
-    for i in range(len(listMove)):
+    for i in range(len(listMove[0])):
         if placeMoveInList is None:
             placeMoveInList = i
         else:
-            if listMove[i][1]<listMove[placeMoveInList][1]:
+            if listMove[1][i]<listMove[1][placeMoveInList]:
                 placeMoveInList = i
     return placeMoveInList
+
+#print(moveWithMinPoint([[9,4,20],[4,1,2]]))
+
 def videInDir(place,dir, board):
     place = caseDacote(place,dir)
     if place in board[1]:
@@ -174,20 +170,26 @@ def pionIntouchable(pion, board):
 
 def strategieDuMoinsDePion(board):
     moveList = movePossibles(board)
-    if len(moveList) >0:
-        nMoveList = changeStyleMove(moveList)
-        if 0 in nMoveList[0]:
+    pionInt = [[],[]]
+    if len(moveList[0])>0:
+        if 0 in moveList[0]:
             return 0
-        elif 7 in nMoveList[0]:
+        elif 7 in moveList[0]:
             return 7
-        elif 56 in nMoveList[0]:
+        elif 56 in moveList[0]:
             return 56
-        elif 63 in nMoveList[0]:
+        elif 63 in moveList[0]:
             return 63
-        elif (len(board[0])+len(board[1]))<= 50:
-            return nMoveList[0][moveWithMinPoint(moveList)]
+        for i in range(len(moveList[0])):
+            if pionIntouchable(moveList[0][i],board):
+                pionInt[0].append(moveList[0][i])
+                pionInt[1].append(moveList[1][i])
+        if len(pionInt[0])>0:
+            moveList = pionInt
+        if (len(board[0])+len(board[1]))<= 50:
+            return moveList[0][moveWithMinPoint(moveList)]
         else:
-            return nMoveList[0][moveWithMaxPoint(moveList)]
+            return moveList[0][moveWithMaxPoint(moveList)]
     else:
         return None
 def bestCoupInThemoment(board):
@@ -207,7 +209,7 @@ def bestCoupInThemoment(board):
     if placeMoveInList == None:
         return placeMoveInList
     else:
-        return moveList[placeMoveInList][0]
+        return moveList[0][placeMoveInList]
 
 def aleatoireCoup(board):
     #renvoie la case d'un move aléatoire dans tout ceux disponible
@@ -222,7 +224,7 @@ def aleatoireCoup(board):
     #       int: chiffre de 0 à 63 correspondant une case d'un move possible
 
     movesList = movePossibles(board)
-    if len(movesList) == 0:
+    if len(movesList[0]) == 0:
         return None
     else:
-        return random.choice(movesList)[0]
+        return random.choice(movesList[0])
