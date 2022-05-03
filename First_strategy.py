@@ -6,7 +6,7 @@ def MAX (board,player):
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board):
-		return utility(board), None
+		return utility(board)#, None
 
 
 	else:
@@ -15,8 +15,8 @@ def MAX (board,player):
 		meilleur_score= float ("-inf")
 
 		for move in movesList:
-			successor = apply(board, move)
-			score,_ = MIN(board)
+			successor = apply(move,board)
+			score,_ = MIN(successor,1)
 			if score > meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -32,7 +32,7 @@ def MIN (board,player):
 	movesList_Adv = AIStrat.movePossibles([board[1],board[0]])
 
 	if gameOver(board):
-		return utility(board), None
+		return utility(board)#, None
 
 
 	else:
@@ -41,8 +41,8 @@ def MIN (board,player):
 		meilleur_score= float ("inf")
 
 		for move in movesList_Adv:
-			successor = apply(board, move)
-			score,_ = MAX(board)
+			successor = apply(move, board)
+			score,_ = MAX(successor,1)
 			if score < meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -65,18 +65,13 @@ def apply(move, board):
 	boardJ = set(board[0])
 	boardA = set(board[1])
 	for dir in AIStrat.directionList:
-		pieceCapture = caseCatch(move,dir,board,[])
+		pieceCapture = caseCatch(move[0],dir,board,[])
 		for piece in pieceCapture:
 			boardJ.add(piece)
 			boardA.remove(piece)
-	boardJ.add(move)
+	boardJ.add(move[0])
 	return [list(boardJ), list(boardA)]
 
-
-
-
-def Strat (board):
-	return MAX(board)
 
 
 def gameOver (board):
@@ -97,6 +92,12 @@ def utility (board):
 
 	else: 
 		return -1
+
+
+def Strat (board):
+	return MAX(board,0)
+
+print(Strat([[28, 35],[27, 36]]))
 
 
 
