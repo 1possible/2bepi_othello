@@ -1,20 +1,29 @@
 import json
 import socket
 import threading as th
+
+import argparse
+
+import AIStrat
 import First_strategy
 
 class AICom:
     run = True
 
-    def __init__(self,port,name,matricules):
+    def __init__(self,port,name,matricules=['21258','12345'],strat ="a"):
         #fonction qui initialise les variables du programme et lance l'inscription
         #rajouter exeption pour les int
+        # port = le port sur lequel le program va écoute pour les request du serveur
         # name = "justUnTest"
         # matricules = ["12345", "67890"] #obliger d'avoir different matricule pour plusieur client
+        # strat = char qui dit quelle strategie utilise
+        #           "a"=aleatoire
+        #           "m"=MinMax
         #idée: faire des fonction pour verifier que les parametres sont dans le bon format
         self.port = port
         self.name = name
         self.matricules = matricules
+        self.strat =strat
         self.adresseServeurRunner = ('127.0.0.1', 3000)
         self.adresse = ('0.0.0.0',self.port)
         self.inscription()
@@ -44,8 +53,8 @@ class AICom:
         #lance play quand il recoit la requet move
         with socket.socket() as sAIServor:
             sAIServor.bind(self.adresse)
+            sAIServor.listen()
             while self.run:
-                sAIServor.listen()
                 clientRunner, adresseRunner = sAIServor.accept()
                 messageServor = clientRunner.recv(2048).decode()
                 try:
@@ -85,10 +94,32 @@ class AICom:
             board = dicGame["state"]["board"]
         else:
             board = [dicGame["state"]["board"][1],dicGame["state"]["board"][0]]
-        move = First_strategy.Strat(board)
-        return {"response": "move","move": move,"message": "aléatoire"}
+        if self.strat == "m":
+            move = First_strategy.Strat(board)
+            message = "minmax"
+        elif self.strat == "f":
+            move = AIStrat.bestCoupInThemoment(board)
+            message ="sur le coup ca me parait une bonne idee"
+        elif self.strat == "n":
+            move = AIStrat.strategieDuMoinsDePion(board)
+            message ="le moins de pion"
+        else :
+            move =AIStrat.aleatoireCoup(board)
+            message = "aleatoire"
+        return {"response": "move","move": move,"message": message}
 
     #def fin(self):
         #self.run = False
         #self.threadEcoute.join() #je sais pas si c'est une bonne idée de le mettre
         # car le theads s'arrete que quand un message arrive car il est bloqué a attendre un message
+
+#pour lance le programme depuis le terminal
+#due au tread qui a pas de fin
+#if __name__ == "__main__":
+#    parser = argparse.ArgumentParser()
+#    parser.add_argument('AIName', help='The name of the game')
+#    parser.add_argument('-p', '--port', type=int, help='The port the program use to listen for request from the serverRunner', default=3000)
+#    parser.add_argument('-AI', '--aiStrat', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax', default='m')
+#    args = parser.parse_args()
+
+#    AICom(args.port, args.AIName, args.aiStrat)
