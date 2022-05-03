@@ -53,8 +53,8 @@ class AICom:
         #lance play quand il recoit la requet move
         with socket.socket() as sAIServor:
             sAIServor.bind(self.adresse)
+            sAIServor.listen()
             while self.run:
-                sAIServor.listen()
                 clientRunner, adresseRunner = sAIServor.accept()
                 messageServor = clientRunner.recv(2048).decode()
                 try:

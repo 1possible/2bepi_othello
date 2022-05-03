@@ -147,6 +147,31 @@ def moveWithMinPoint(listMove):
             if listMove[i][1]<listMove[placeMoveInList][1]:
                 placeMoveInList = i
     return placeMoveInList
+def videInDir(place,dir, board):
+    place = caseDacote(place,dir)
+    if place in board[1]:
+        return False
+    elif place in board[0]:
+        return videInDir(place,dir,board)
+    elif place is None:
+        return True
+    else:
+        return False
+
+def pionIntouchable(pion, board):
+    dirImprenable = 0
+    for i in range(int(len(directionList)/2)):
+        if videInDir(pion,directionList[i*2],board):
+            dirImprenable +=1
+        elif videInDir(pion,directionList[i*2+1],board):
+            dirImprenable += 1
+
+    if dirImprenable==4:
+        return True
+    else:
+        return False
+
+
 def strategieDuMoinsDePion(board):
     moveList = movePossibles(board)
     if len(moveList) >0:
