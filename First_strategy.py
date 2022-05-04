@@ -49,6 +49,25 @@ def MIN (board,player):
 
 		return meilleur_score, meilleur_coup
 
+
+def negamax(board):
+
+	movesList = AIStrat.movePossibles(board)
+
+	if gameOver(board):
+		return -utility(board), None
+
+	meilleur_score, meilleur_coup = float('-inf'), None
+	for move in movesList[0]:
+		successor = apply(move,board)
+		score, _ = negamax([successor[1],successor[0]])
+		if score > meilleur_score:
+			meilleur_score, meilleur_coup = score, move
+	return -meilleur_score, meilleur_coup
+
+
+
+
 def caseCatch(case,dir, board, listPiece):
 	case = AIStrat.caseDacote(case,dir)
 	if case in board[1]:
@@ -131,7 +150,7 @@ def heuristic(board):
 
 
 def Strat (board):
-	return MAX(board,0)
+	return negamax(board,1)
 
 
 
