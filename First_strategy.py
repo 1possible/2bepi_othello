@@ -150,7 +150,7 @@ def heuristic(board):
 
 
 def Strat (board):
-	return negamax(board,1)
+	return negamax(board)
 
 
 
