@@ -67,6 +67,7 @@ def negamax(board):
 
 def negamaxLimitedDepth(board,depth=1):
 
+<<<<
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board) or depth==0:
@@ -79,6 +80,29 @@ def negamaxLimitedDepth(board,depth=1):
 		if score >= meilleur_score:
 			meilleur_score, meilleur_coup = score, move
 	return -meilleur_score, meilleur_coup
+
+
+
+def negamaxWithPruning(board,alpha=float('-inf'), beta=float('inf')):
+
+	movesList = AIStrat.movePossibles(board)
+
+	if gameOver(board):
+		return -utility(board), None
+
+
+	meilleur_score, meilleur_coup = float('-inf'), None
+	for move in movesList[0]:
+		successor = apply(move,board)
+		score, _ = negamaxWithPruning([successor[1],successor[0]],-beta, -alpha)
+		if score > meilleur_score:
+			meilleur_score, meilleur_coup = score, move
+		alpha = max(alpha,meilleur_score)
+		if alpha >=beta:
+			break
+	return -meilleur_score, meilleur_coup
+
+
 
 
 def caseCatch(case,dir, board, listPiece):
@@ -164,7 +188,8 @@ def heuristic(board):
 
 
 def Strat (board):
-	return negamaxLimitedDepth(board)
+	return negamaxWithPruning(board)
+
 
 
 #print(Strat([[28, 35],[27, 36]]))
