@@ -10,10 +10,9 @@ def movePossibles(board):
     #           board[0]: liste qui contient les cases de ses pieces
     #           board[1]: liste qui contient les cases des piece de son adversaire
     #return:
-    #   une liste des moves
-    #       les moves possible sont sous forme de liste à 2 éléments
-    #           l'élément 0: int: la case du move
-    #           l'élément 1: int: le nombre de piece prise avec ce move
+    #   une liste des moves sous forme de liste à 2 éléments
+    #           l'élément 0: int: list des move (case)
+    #           l'élément 1: int: list du nombre de piece prise avec ce move
     movesList = [[],[]]
     for pion in board[0]:
         for direction in directionList:
@@ -29,10 +28,6 @@ def moveInMovesList(movesList,newMove, pointMove):
     #Parametre:
     #   movesList: liste de move
     #   newMove : un move que l'on veut rajouté dans movesList
-    #
-    #       les moves sont sous forme de liste à 2 élément
-    #           le element 0: int: la case du move
-    #           le element 1: int :le nombre de piece prise avec ce move
     #Return :
     #   movesList avec le nouveau move rajouté
 

@@ -66,8 +66,6 @@ def negamax(board):
 	return -meilleur_score, meilleur_coup
 
 def negamaxLimitedDepth(board,depth=1):
-
-<<<<
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board) or depth==0:
@@ -102,7 +100,24 @@ def negamaxWithPruning(board,alpha=float('-inf'), beta=float('inf')):
 			break
 	return -meilleur_score, meilleur_coup
 
+def negamaxWithPruningLimitedDepth(board,depth=2,alpha=float('-inf'), beta=float('inf')):
 
+	movesList = AIStrat.movePossibles(board)
+
+	if gameOver(board) or depth==0:
+		return -heuristic(board), None
+
+
+	meilleur_score, meilleur_coup = float('-inf'), None
+	for move in movesList[0]:
+		successor = apply(move,board)
+		score, _ = negamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+		if score >= meilleur_score:
+			meilleur_score, meilleur_coup = score, move
+		alpha = max(alpha,meilleur_score)
+		if alpha >=beta:
+			break
+	return -meilleur_score, meilleur_coup
 
 
 def caseCatch(case,dir, board, listPiece):
@@ -188,18 +203,18 @@ def heuristic(board):
 
 
 def Strat (board):
-	return negamaxWithPruning(board)
+	return negamaxWithPruningLimitedDepth(board)[1]
 
 
 
 #print(Strat([[28, 35],[27, 36]]))
 
 #print(Strat([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-        [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
-          45, 46, 49, 50, 53, 54, 55, 62, 63]]))
+#        [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
+#          45, 46, 49, 50, 53, 54, 55, 62, 63]]))
 #print(Strat([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
-          45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-         ]))
+#          45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+#         ]))
 
 
 
