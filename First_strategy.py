@@ -1,5 +1,14 @@
 import AIStrat
+from collections import defaultdict
+import time
 
+def timeit(fun):
+	def wrapper(*args, **kwargs):
+		start = time.time()
+		res = fun(*args, **kwargs)
+		print('Executed in {}s'.format(time.time() - start))
+		return res
+	return wrapper
 
 def MAX (board,player):
 
@@ -119,6 +128,39 @@ def negamaxWithPruningLimitedDepth(board,depth=2,alpha=float('-inf'), beta=float
 			break
 	return -meilleur_score, meilleur_coup
 
+def negamaxWithPruningIterativeDeepening(board,timeout=9.30):
+	cache = defaultdict(lambda: 0)
+	def cachedNegamaxWithPruningLimitedDepth(board, depth, alpha=float('-inf'), beta=float('inf')):
+		over = gameOver(board)
+		movesList = AIStrat.movePossibles(board)
+
+		if over or depth==0:
+			res = -heuristic(board), None, over
+		else:
+			meilleur_score, meilleur_coup,the_over = float('-inf'), None, True
+			possiblility = [(move, apply(move,board))for move in movesList[0]]
+			possiblility.sort(key=lambda poss: cache[(frozenset(poss[1][0]),frozenset(poss[1][1]))])
+			for move, successor in reversed(possiblility):
+				score, _ ,over= cachedNegamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+				the_over = the_over and over
+				if score >= meilleur_score:
+					meilleur_score, meilleur_coup = score, move
+				alpha = max(alpha,meilleur_score)
+				if alpha >=beta:
+					break
+			res = -meilleur_score,meilleur_coup, the_over
+		cache[frozenset(board[0]),frozenset(board[1])] = res[0]
+		return res
+	score, move = 0, None
+	depth = 1
+	start = time.time()
+	over = False
+	while score > float("-inf") and  not over and time.time()-start < timeout:
+		score, move, over = cachedNegamaxWithPruningLimitedDepth(board, depth)
+		depth +=1
+	print("depth =", depth)
+	return score, move
+
 
 def caseCatch(case,dir, board, listPiece):
 	case = AIStrat.caseDacote(case,dir)
@@ -149,10 +191,8 @@ def gameOver (board):
 
 	if len(board[0])+len(board[1]) == 64:
 		return True
-
 	elif len (AIStrat.movePossibles(board)[0]) == 0 and (AIStrat.movePossibles([board[1],board[0]])[0]) == 0:
 		return True 
-
 	else:
 		return False
 
@@ -160,21 +200,16 @@ def utility (board):
 
 	if len (board[0]) > len (board[1]):
 		return 1
-
 	else: 
 		return -1
 
 
 def heuristic(board):
-
 	if gameOver(board):
-
 		if len (board[0]) > len (board[1]):
 			return float("inf")
-
 		else: 
 			return float ("-inf")
-
 	h=0
 	if len(board[0])+len(board[1]) >25:
 		h += len (board[0]) - len(board[1])
@@ -186,20 +221,9 @@ def heuristic(board):
 	return h
 
 
-
-	
-		
-
-
-	
-
-
-
-
-
-
-
-
+@timeit
+def StratIterative(board):
+	return negamaxWithPruningIterativeDeepening(board,8)[1]
 
 
 def Strat (board):
@@ -207,14 +231,14 @@ def Strat (board):
 
 
 
-#print(Strat([[28, 35],[27, 36]]))
+#print(StratIterative([[28, 35],[27, 36]]))
 
-#print(Strat([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-#        [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
+#print(StratIterative([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+#       [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
 #          45, 46, 49, 50, 53, 54, 55, 62, 63]]))
-#print(Strat([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
-#          45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-#         ]))
+#print(StratIterative([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,#
+#         45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+#        ]))
 
 
 
