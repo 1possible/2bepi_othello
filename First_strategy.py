@@ -11,13 +11,15 @@ def timeit(fun):
 		return res
 	return wrapper
 
-def MAX (board,player):
+def MAX (board):
+
+# Stratégie minimax
+# Fonction pour joueur max
 
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board):
 		return utility(board), None
-
 
 	else:
 
@@ -26,7 +28,7 @@ def MAX (board,player):
 
 		for move in movesList[0]:
 			successor = apply(move,board)
-			score,_ = MIN([successor[1],successor[0]],1)
+			score,_ = MIN([successor[1],successor[0]])
 			if score > meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -34,16 +36,15 @@ def MAX (board,player):
 		return meilleur_score ,meilleur_coup
 
 
+def MIN (board):
 
-
-def MIN (board,player):
-
+# Stratégie minimax
+# Fonction pour joueur min
 
 	movesList_Adv = AIStrat.movePossibles(board)
 
 	if gameOver(board):
 		return utility(board), None
-
 
 	else:
 
@@ -52,7 +53,7 @@ def MIN (board,player):
 
 		for move in movesList_Adv[0]:
 			successor = apply(move, board)
-			score,_ = MAX([successor[1],successor[0]],1)
+			score,_ = MAX([successor[1],successor[0]])
 			if score < meilleur_score :
 				meilleur_coup = move
 				meilleur_score = score
@@ -61,6 +62,9 @@ def MIN (board,player):
 
 
 def negamax(board):
+
+# Stratégie negamax 
+# Fonction negamax combinant les fonctions max et min
 
 	movesList = AIStrat.movePossibles(board)
 
@@ -76,6 +80,9 @@ def negamax(board):
 	return -meilleur_score, meilleur_coup
 
 def negamaxLimitedDepth(board,depth=1):
+
+# Stratégie negamax avec profondeur limitée
+
 	movesList = AIStrat.movePossibles(board)
 
 	if gameOver(board) or depth==0:
@@ -92,6 +99,8 @@ def negamaxLimitedDepth(board,depth=1):
 
 
 def negamaxWithPruning(board,alpha=float('-inf'), beta=float('inf')):
+
+# Stratégie negamax avec pruning
 
 	movesList = AIStrat.movePossibles(board)
 
@@ -111,6 +120,8 @@ def negamaxWithPruning(board,alpha=float('-inf'), beta=float('inf')):
 	return -meilleur_score, meilleur_coup
 
 def negamaxWithPruningLimitedDepth(board,depth=3,alpha=float('-inf'), beta=float('inf')):
+
+# Stratégie negamax avec pruning et profondeur limitée
 
 	movesList = AIStrat.movePossibles(board)
 
@@ -182,6 +193,24 @@ class negamaxWithPruningIterativeDeepening:
 
 
 def caseCatch(case,dir, board, listPiece):
+#Fonction de capture de case 
+
+#    Paramètres:
+#       case        : int compris entre 0 et 63 inclus: case de référence
+#       direction   : tuple avec comme premier élément -1,0,1 qui fait reference à la colonne
+#                                      deuxiemme élément -1,0,1 qui fait référence à la ligne
+#       board       : l'etat du plateau sour forme de list à 2 éléments
+#                       board[0] :liste qui contient les cases de ses pieces
+#                       board[1] : liste qui contient les cases des piece de son adversaire
+#       listPiece   : liste des pions
+
+#Elle regarde si la case qui se trouve à coté dans la direction :
+#                                                               - est prise par l'adversaire --> elle ajoute la case à la liste des pions 
+#                                                                 puis retourne la liste 
+#                                                               - est prise par notre joueur --> elle retourne la liste des pions
+#                                                               - n'est pas prise --> elle retourne une liste vide
+# Sinon elle retourne une liste vide
+
 	case = AIStrat.caseDacote(case,dir)
 	if case in board[1]:
 		listPiece.append(case)
@@ -194,6 +223,15 @@ def caseCatch(case,dir, board, listPiece):
 		return []
 
 def apply(move, board):
+# Fonction qui renvoie 2 ensembles avec comme paramètres le move (case à prendre) et l'état du plateau
+# Les 2 ensembles :
+# boardJ : ensemble des pions de notre joueur
+# boardA : ensemble des pions de l'adversaire
+# Pour une direction , ajout du pion capturé (se trouvant dans la liste de pions capturés) dans l'ensemble des pions de notre joueur
+#                      + retrait de ce pion de l'ensemble des pions de l'adversaire
+# Ajout du move dans l'ensemble des pions de notre joueur
+
+
 	boardJ = set(board[0])
 	boardA = set(board[1])
 	for dir in AIStrat.directionList:
@@ -207,6 +245,15 @@ def apply(move, board):
 
 
 def gameOver (board):
+# Fonction qui regarde si la partie est finie
+
+# Si 
+# - tous les pions sont sur le plateau
+# - plus de move pour les 2 joueurs
+# la fonction retourne true
+
+# Sinon elle retourne false
+
 
 	if len(board[0])+len(board[1]) == 64:
 		return True
@@ -216,6 +263,8 @@ def gameOver (board):
 		return False
 
 def utility (board):
+# Fonction qui retourne 1 si le nombre de pions de notre joueur est plus grand que celui de l'adversaire
+# Sinon elle retourne -1
 
 	if len (board[0]) > len (board[1]):
 		return 1
@@ -224,6 +273,9 @@ def utility (board):
 
 
 def heuristic(board):
+# Fonction heuristique
+# .... À compléter 
+
 	if gameOver(board):
 		if len (board[0]) > len (board[1]):
 			return float("inf")
@@ -264,6 +316,7 @@ def Strat (board):
 
 
 
+
 #print(StratIterative([[28, 35],[27, 36]]))
 
 #print(StratIterative([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
@@ -272,6 +325,7 @@ def Strat (board):
 #print(StratIterative([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,#
 #         45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
 #        ]))
+
 
 
 
