@@ -98,6 +98,9 @@ class AICom:
         if self.strat == "m":
             move = First_strategy.Strat(board)
             message = "minmax"
+        elif self.strat == "i":
+            move= First_strategy.StratIterative(board)
+            message = "iterative"
         elif self.strat == "f":
             move = AIStrat.bestCoupInThemoment(board)
             message ="sur le coup ca me parait une bonne idee"
