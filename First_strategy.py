@@ -109,7 +109,7 @@ def negamaxWithPruning(board,alpha=float('-inf'), beta=float('inf')):
 			break
 	return -meilleur_score, meilleur_coup
 
-def negamaxWithPruningLimitedDepth(board,depth=2,alpha=float('-inf'), beta=float('inf')):
+def negamaxWithPruningLimitedDepth(board,depth=3,alpha=float('-inf'), beta=float('inf')):
 
 	movesList = AIStrat.movePossibles(board)
 
@@ -227,6 +227,7 @@ def StratIterative(board):
 
 
 def Strat (board):
+# Fonction qui retourne la stratégie choisie
 	return negamaxWithPruningLimitedDepth(board)[1]
 
 
