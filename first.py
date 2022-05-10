@@ -10,9 +10,9 @@ if __name__=="__main__":
     hex = AICom.AICom(8885, "mine2", ["98666", "14666"], 'n')
 
     roversi1= AICom.AICom(8886, "roversi1", ["98763", "14753"],'m')
-    roversi2 = AICom.AICom(8887,"roversi2",["12395", "67490"],'m')
+    #roversi2 = AICom.AICom(8887,"roversi2",["12395", "67490"],'m')
 
     i1 = AICom.AICom(8888, "i1", ["18763", "24753"], 'i')
-    i2 = AICom.AICom(8889, "i2", ["22395", "17490"], 'i')
+    #i2 = AICom.AICom(8889, "i2", ["22395", "17490"], 'i')
 
 
