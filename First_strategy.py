@@ -1,6 +1,7 @@
 import AIStrat
 from collections import defaultdict
 import time
+import asyncio
 
 def timeit(fun):
 	def wrapper(*args, **kwargs):
@@ -128,20 +129,42 @@ def negamaxWithPruningLimitedDepth(board,depth=3,alpha=float('-inf'), beta=float
 			break
 	return -meilleur_score, meilleur_coup
 
-def negamaxWithPruningIterativeDeepening(board,timeout=9.30):
-	cache = defaultdict(lambda: 0)
-	def cachedNegamaxWithPruningLimitedDepth(board, depth, alpha=float('-inf'), beta=float('inf')):
+class negamaxWithPruningIterativeDeepening:
+	def __init__(self,timeout=4.50):
+		self.cache = defaultdict(lambda: 0)
+		self.score = 0
+		self.move = None
+		self.over = False
+		self.start = time.time()
+		self.depth =1
+		self.timeout =timeout
+
+	async def main(self,board):
+		chrono =asyncio.create_task(self.search(board))
+		await chrono
+		return self.move
+
+	async def search(self,board):
+		searchperDepth = asyncio.create_task(self.threadNegamax(board))
+		while not self.over:
+			if time.time() - self.start >= self.timeout:
+				break
+			await asyncio.sleep(0)
+		print("depth =", self.depth)
+
+
+	async def cachedNegamaxWithPruningLimitedDepth(self,board, depth, alpha=float('-inf'), beta=float('inf')):
 		over = gameOver(board)
 		movesList = AIStrat.movePossibles(board)
-
 		if over or depth==0:
 			res = -heuristic(board), None, over
 		else:
 			meilleur_score, meilleur_coup,the_over = float('-inf'), None, True
 			possiblility = [(move, apply(move,board))for move in movesList[0]]
-			possiblility.sort(key=lambda poss: cache[(frozenset(poss[1][0]),frozenset(poss[1][1]))])
+			possiblility.sort(key=lambda poss: self.cache[(frozenset(poss[1][0]),frozenset(poss[1][1]))])
 			for move, successor in reversed(possiblility):
-				score, _ ,over= cachedNegamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+				score, _ ,over= await self.cachedNegamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+				await asyncio.sleep(0)
 				the_over = the_over and over
 				if score >= meilleur_score:
 					meilleur_score, meilleur_coup = score, move
@@ -149,17 +172,13 @@ def negamaxWithPruningIterativeDeepening(board,timeout=9.30):
 				if alpha >=beta:
 					break
 			res = -meilleur_score,meilleur_coup, the_over
-		cache[frozenset(board[0]),frozenset(board[1])] = res[0]
+		self.cache[frozenset(board[0]),frozenset(board[1])] = res[0]
 		return res
-	score, move = 0, None
-	depth = 1
-	start = time.time()
-	over = False
-	while score > float("-inf") and  not over and time.time()-start < timeout:
-		score, move, over = cachedNegamaxWithPruningLimitedDepth(board, depth)
-		depth +=1
-	print("depth =", depth)
-	return score, move
+	async def threadNegamax(self,board):
+		while self.score > float("-inf") and not self.over and time.time()-self.start < self.timeout-0.05:
+			self.score, self.move, self.over = await self.cachedNegamaxWithPruningLimitedDepth(board, self.depth)
+			self.depth += 1
+			await asyncio.sleep(0)
 
 
 def caseCatch(case,dir, board, listPiece):
@@ -223,7 +242,8 @@ def heuristic(board):
 
 @timeit
 def StratIterative(board):
-	return negamaxWithPruningIterativeDeepening(board,8)[1]
+	search = negamaxWithPruningIterativeDeepening()
+	return asyncio.run(search.main(board))
 
 
 def Strat (board):
