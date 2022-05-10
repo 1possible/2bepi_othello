@@ -10,7 +10,7 @@ import First_strategy
 class AICom:
     run = True
 
-    def __init__(self,port,name,matricules=['21258','20242'],strat ="a"):
+    def __init__(self,port,name,strat ="a",matricules=['21258','20242']):
         #fonction qui initialise les variables du programme et lance l'inscription
         #rajouter exeption pour les int
         # port = le port sur lequel le program va écoute pour les request du serveur
@@ -26,7 +26,8 @@ class AICom:
         self.strat =strat
         self.adresseServeurRunner = ('127.0.0.1', 3000)
         self.adresse = ('0.0.0.0',self.port)
-        self.inscription()
+        if self.strat != "t":
+            self.inscription()
 
 
     def inscription(self):
