@@ -130,7 +130,7 @@ def negamaxWithPruningLimitedDepth(board,depth=3,alpha=float('-inf'), beta=float
 	return -meilleur_score, meilleur_coup
 
 class negamaxWithPruningIterativeDeepening:
-	def __init__(self,timeout=4.50):
+	def __init__(self,timeout=4.45):
 		self.cache = defaultdict(lambda: 0)
 		self.score = 0
 		self.move = None
@@ -175,7 +175,7 @@ class negamaxWithPruningIterativeDeepening:
 		self.cache[frozenset(board[0]),frozenset(board[1])] = res[0]
 		return res
 	async def threadNegamax(self,board):
-		while self.score > float("-inf") and not self.over and time.time()-self.start < self.timeout-0.05:
+		while self.score > float("-inf") and not self.over and time.time()-self.start < self.timeout-0.15:
 			self.score, self.move, self.over = await self.cachedNegamaxWithPruningLimitedDepth(board, self.depth)
 			self.depth += 1
 			await asyncio.sleep(0)
@@ -230,13 +230,25 @@ def heuristic(board):
 		else: 
 			return float ("-inf")
 	h=0
-	if len(board[0])+len(board[1]) >25:
-		h += len (board[0]) - len(board[1])
+
+	if len(board[0])+len(board[1]) <15:
+		coefDifPion = 0
+	elif len(board[0])+len(board[1]) <50:
+		coefDifPion = 1
+	elif len(board[0])+len(board[1]) <55:
+		coefDifPion = 2
+	else:
+		coefDifPion = 4
+	h += (len (board[0]) - len(board[1]))* coefDifPion
 	pionIntouchable = 0
 	for pion in board[0]:
 		if(AIStrat.pionIntouchable(pion,board)):
 			pionIntouchable+=1
+	for pion in board[1]:
+		if(AIStrat.pionIntouchable(pion,board)):
+			pionIntouchable-=1
 	h+=pionIntouchable
+	h+= (len(AIStrat.movePossibles(board)[0])-len(AIStrat.movePossibles([board[1],board[0]])[0]))
 	return h
 
 
