@@ -44,7 +44,7 @@ def MIN (board):
 	movesList_Adv = AIStrat.movePossibles(board)
 
 	if gameOver(board):
-		return utility(board), None
+		return -utility(board), None
 
 	else:
 
@@ -257,7 +257,7 @@ def gameOver (board):
 
 	if len(board[0])+len(board[1]) == 64:
 		return True
-	elif len (AIStrat.movePossibles(board)[0]) == 0 and (AIStrat.movePossibles([board[1],board[0]])[0]) == 0:
+	elif len(AIStrat.movePossibles(board)[0]) == 0 and len(AIStrat.movePossibles([board[1],board[0]])[0]) == 0:
 		return True 
 	else:
 		return False
@@ -282,15 +282,23 @@ def heuristic(board):
 		else: 
 			return float ("-inf")
 	h=0
-
-	if len(board[0])+len(board[1]) <15:
+	coefDifMove = 0
+	if len(board[0])+len(board[1]) <7:
 		coefDifPion = 0
-	elif len(board[0])+len(board[1]) <50:
+		coefDifMove = 2
+	elif len(board[0])+len(board[1]) <15:
+		coefDifPion = 0
+		coefDifMove = 2
+	elif len(board[0])+len(board[1]) <45:
 		coefDifPion = 1
-	elif len(board[0])+len(board[1]) <55:
-		coefDifPion = 2
-	else:
+		coefDifMove = 3
+	elif len(board[0])+len(board[1]) <50:
+		coefDifPion = 3
+	elif len(board[0]) + len(board[1])< 55:
 		coefDifPion = 4
+
+	else:
+		coefDifPion = 6
 	h += (len (board[0]) - len(board[1]))* coefDifPion
 	pionIntouchable = 0
 	for pion in board[0]:
@@ -299,45 +307,29 @@ def heuristic(board):
 	for pion in board[1]:
 		if(AIStrat.pionIntouchable(pion,board)):
 			pionIntouchable-=1
-	h+=pionIntouchable
-	h+= (len(AIStrat.movePossibles(board)[0])-len(AIStrat.movePossibles([board[1],board[0]])[0]))
+	h+=pionIntouchable*6
+	h+= (len(AIStrat.movePossibles(board)[0])-len(AIStrat.movePossibles([board[1],board[0]])[0]))*coefDifMove
 	return h
 
 
 @timeit
-def StratIterative(board):
+def stratIterative(board):
 	search = negamaxWithPruningIterativeDeepening()
 	return asyncio.run(search.main(board))
 
 
-def Strat (board):
+def strat (board):
 # Fonction qui retourne la stratégie choisie
 	return negamaxWithPruningLimitedDepth(board)[1]
 
 
 
 
-#print(StratIterative([[28, 35],[27, 36]]))
+#print(stratIterative([[28, 35],[27, 36]]))
 
-#print(StratIterative([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
+#print(stratIterative([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
 #       [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
 #          45, 46, 49, 50, 53, 54, 55, 62, 63]]))
-#print(StratIterative([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,#
+#print(stratIterative([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,#
 #         45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
 #        ]))
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-

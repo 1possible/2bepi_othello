@@ -96,10 +96,10 @@ class AICom:
         else:
             board = [dicGame["state"]["board"][1],dicGame["state"]["board"][0]]
         if self.strat == "m":
-            move = First_strategy.Strat(board)
+            move = First_strategy.strat(board)
             message = "minmax"
         elif self.strat == "i":
-            move= First_strategy.StratIterative(board)
+            move= First_strategy.stratIterative(board)
             message = "iterative"
         elif self.strat == "f":
             move = AIStrat.bestCoupInThemoment(board)
