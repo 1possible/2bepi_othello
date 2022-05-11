@@ -12,7 +12,6 @@ class AICom:
 
     def __init__(self,port,name,strat ="a",matricules=['21258','20242']):
         #fonction qui initialise les variables du programme et lance l'inscription
-        #rajouter exeption pour les int
         # port = le port sur lequel le program va écoute pour les request du serveur
         # name = "justUnTest"
         # matricules = ["12345", "67890"] #obliger d'avoir different matricule pour plusieur client
@@ -34,7 +33,7 @@ class AICom:
         #fonction qui inscrit le programme à l'adresse (adresseServeurRunner)
         # si il arrive a s'inscrire il lance la fonction "ecoute"
         with socket.socket() as sInscription:
-            #faire fonction si jamais il arrive pas a ce connecter
+            #idée: faire fonction si jamais il arrive pas a ce connecter
             jsonDico = {"request": "subscribe", "port": self.port, "name": self.name, "matricules": self.matricules}
             sInscription.connect(self.adresseServeurRunner)
             invitation = json.dumps(jsonDico)
@@ -118,7 +117,7 @@ class AICom:
         # car le theads s'arrete que quand un message arrive car il est bloqué a attendre un message
 
 #pour lance le programme depuis le terminal
-#due au tread qui a pas de fin
+#due au tread qui a pas de fin (fonction bloquante)
 #if __name__ == "__main__":
 #    parser = argparse.ArgumentParser()
 #    parser.add_argument('AIName', help='The name of the game')

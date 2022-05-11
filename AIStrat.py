@@ -136,7 +136,6 @@ def moveWithMinPoint(listMove):
                 placeMoveInList = i
     return placeMoveInList
 
-#print(moveWithMinPoint([[9,4,20],[4,1,2]]))
 
 def videInDir(place,dir, board):
     place = caseDacote(place,dir)

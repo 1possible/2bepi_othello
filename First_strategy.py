@@ -141,7 +141,7 @@ def negamaxWithPruningLimitedDepth(board,depth=3,alpha=float('-inf'), beta=float
 	return -meilleur_score, meilleur_coup
 
 class negamaxWithPruningIterativeDeepening:
-	def __init__(self,timeout=4.45):
+	def __init__(self,timeout=4.60):
 		self.cache = defaultdict(lambda: 0)
 		self.score = 0
 		self.move = None
@@ -151,11 +151,11 @@ class negamaxWithPruningIterativeDeepening:
 		self.timeout =timeout
 
 	async def main(self,board):
-		chrono =asyncio.create_task(self.search(board))
+		chrono =asyncio.create_task(self.searchChrono(board))
 		await chrono
 		return self.move
 
-	async def search(self,board):
+	async def searchChrono(self,board):
 		searchperDepth = asyncio.create_task(self.threadNegamax(board))
 		while not self.over:
 			if time.time() - self.start >= self.timeout:
@@ -165,6 +165,7 @@ class negamaxWithPruningIterativeDeepening:
 
 
 	async def cachedNegamaxWithPruningLimitedDepth(self,board, depth, alpha=float('-inf'), beta=float('inf')):
+		await asyncio.sleep(0)
 		over = gameOver(board)
 		movesList = AIStrat.movePossibles(board)
 		if over or depth==0:
@@ -191,7 +192,7 @@ class negamaxWithPruningIterativeDeepening:
 		self.cache[frozenset(board[0]),frozenset(board[1])] = res[0]
 		return res
 	async def threadNegamax(self,board):
-		while self.score > float("-inf") and not self.over and time.time()-self.start < self.timeout-0.15:
+		while self.score > float("-inf") and not self.over and time.time()-self.start < self.timeout:
 			self.score, self.move, self.over = await self.cachedNegamaxWithPruningLimitedDepth(board, self.depth)
 			self.depth += 1
 			await asyncio.sleep(0)
@@ -279,7 +280,13 @@ def utility (board):
 
 def heuristic(board):
 # Fonction heuristique
-# .... À compléter 
+#il renvoie
+# -> si joueur a gagner inf
+# -> si joueur perdu -inf
+# -> si partie pas fini donne un score qui depend
+#	->difference de pion
+#	->difference de pion intouchable
+#	->difference de coup possible
 
 	if gameOver(board):
 		if len (board[0]) > len (board[1]):
