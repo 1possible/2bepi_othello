@@ -170,19 +170,24 @@ class negamaxWithPruningIterativeDeepening:
 		if over or depth==0:
 			res = -heuristic(board), None, over
 		else:
-			meilleur_score, meilleur_coup,the_over = float('-inf'), None, True
-			possiblility = [(move, apply(move,board))for move in movesList[0]]
-			possiblility.sort(key=lambda poss: self.cache[(frozenset(poss[1][0]),frozenset(poss[1][1]))])
-			for move, successor in reversed(possiblility):
-				score, _ ,over= await self.cachedNegamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+			if len(movesList[0])==0:
+				score, _, over = await self.cachedNegamaxWithPruningLimitedDepth([board[1],board[0]],depth-1, -beta, -alpha)
 				await asyncio.sleep(0)
-				the_over = the_over and over
-				if score >= meilleur_score:
-					meilleur_score, meilleur_coup = score, move
-				alpha = max(alpha,meilleur_score)
-				if alpha >=beta:
-					break
-			res = -meilleur_score,meilleur_coup, the_over
+				res= -score, None, over
+			else:
+				meilleur_score, meilleur_coup,the_over = float('-inf'), None, True
+				possiblility = [(move, apply(move,board))for move in movesList[0]]
+				possiblility.sort(key=lambda poss: self.cache[(frozenset(poss[1][0]),frozenset(poss[1][1]))])
+				for move, successor in reversed(possiblility):
+					score, _ ,over= await self.cachedNegamaxWithPruningLimitedDepth([successor[1],successor[0]],depth-1,-beta, -alpha)
+					await asyncio.sleep(0)
+					the_over = the_over and over
+					if score >= meilleur_score:
+						meilleur_score, meilleur_coup = score, move
+					alpha = max(alpha,meilleur_score)
+					if alpha >=beta:
+						break
+				res = -meilleur_score,meilleur_coup, the_over
 		self.cache[frozenset(board[0]),frozenset(board[1])] = res[0]
 		return res
 	async def threadNegamax(self,board):
