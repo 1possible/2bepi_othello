@@ -71,11 +71,11 @@ def test_negamaxWithPruningLimitedDepth():
 def test_stratIterative():
 	assert First_strategy.stratIterative([[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
 	[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
-	45, 46, 49, 50, 53, 54, 55, 62, 63]])==  0
+	45, 46, 49, 50, 53, 54, 55, 62, 63]])[0]==  0
 	assert First_strategy.stratIterative([[1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 18, 19, 22, 23, 25, 27, 28, 29, 30, 31, 37, 38, 39, 41, 43,
 	45, 46, 49, 50, 53, 54, 55, 62, 63],[8, 16, 17, 20, 21, 24, 26, 32, 33, 34, 35, 36, 40, 42, 44, 47, 48, 51, 52, 56, 57, 58, 59, 60, 61],
-	]) == None
-	assert First_strategy.stratIterative([[28, 35], [27, 36]]) in AIStrat.movePossibles([[28, 35], [27, 36]])[0]
+	])[0] == None
+	assert First_strategy.stratIterative([[28, 35], [27, 36]])[0] in AIStrat.movePossibles([[28, 35], [27, 36]])[0]
 
 def test_apply():
 	plateauSuccesseur = First_strategy.apply(44, [[28, 35], [27, 36]])

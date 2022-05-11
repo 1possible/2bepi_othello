@@ -153,7 +153,7 @@ class negamaxWithPruningIterativeDeepening:
 	async def main(self,board):
 		chrono =asyncio.create_task(self.searchChrono(board))
 		await chrono
-		return self.move
+		return self.move, -self.score
 
 	async def searchChrono(self,board):
 		searchperDepth = asyncio.create_task(self.threadNegamax(board))
@@ -162,6 +162,7 @@ class negamaxWithPruningIterativeDeepening:
 				break
 			await asyncio.sleep(0)
 		print("depth =", self.depth)
+		print("score =", - self.score)
 
 
 	async def cachedNegamaxWithPruningLimitedDepth(self,board, depth, alpha=float('-inf'), beta=float('inf')):
@@ -319,7 +320,7 @@ def heuristic(board):
 	for pion in board[1]:
 		if(AIStrat.pionIntouchable(pion,board)):
 			pionIntouchable-=1
-	h+=pionIntouchable*6
+	h+=pionIntouchable*7
 	h+= (len(AIStrat.movePossibles(board)[0])-len(AIStrat.movePossibles([board[1],board[0]])[0]))*coefDifMove
 	return h
 
@@ -327,7 +328,22 @@ def heuristic(board):
 @timeit
 def stratIterative(board):
 	search = negamaxWithPruningIterativeDeepening()
-	return asyncio.run(search.main(board))
+	move, score = asyncio.run(search.main(board))
+	if score == float("inf"):
+		message = "^^"
+	elif score == float("-inf"):
+		message = "X( <bien joué>"
+	elif score >50:
+		message = ":D"
+	elif score <-50:
+		message = ">:("
+	elif score >0:
+		message = ":)"
+	elif score <0:
+		message = ":("
+	else:
+		message = "..."
+	return move, message
 
 
 def strat (board):

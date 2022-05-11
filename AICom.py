@@ -10,7 +10,7 @@ import First_strategy
 class AICom:
     run = True
 
-    def __init__(self,port,name,strat ="a",matricules=['21258','20242']):
+    def __init__(self,port,name,strat ="i",matricules=['21258','20242']):
         #fonction qui initialise les variables du programme et lance l'inscription
         # port = le port sur lequel le program va écoute pour les request du serveur
         # name = "justUnTest"
@@ -98,8 +98,7 @@ class AICom:
             move = First_strategy.strat(board)
             message = "minmax"
         elif self.strat == "i":
-            move= First_strategy.stratIterative(board)
-            message = "iterative"
+            move, message= First_strategy.stratIterative(board)
         elif self.strat == "f":
             move = AIStrat.bestCoupInThemoment(board)
             message ="sur le coup ca me parait une bonne idee"
