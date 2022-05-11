@@ -1,5 +1,14 @@
 # 2bepi_othello
 # Stratégie utilisé
+## negamax avec profondeur variable
+strat = "i"  
+Elle utilise la stratégie MinMax (negamax) en regardant le plus loin dans l'arbre possible en respectant sa contrainte de temps (Approfondissement itératif) en éliminant les branches inutile à dévlopper(Alpha Beta Pruning). Elle determine la valeur d'un coup avec la fonction heuristic.
+### heuristic
+la valeur que retourne heuristique dépend
+* de la différence de point entre l'adversaire et le joueur
+* le nombre de pion pas retournable du joueur et celui de son adversaire
+* le nombre de coup possible au prochain tour du joueur et de son adversaire
+
 # autre stratégie
 ## aléatoire a.k.a debilus
 strat = "a"  
@@ -15,15 +24,14 @@ Il joue le pire qui rapport le moins de point jusqu'a ce que le terrai soit remp
 Si il y a un coup possible qui est un coin ou si il peut placer un pion imprenable par l'adversaire il les prendra en priorité.
 
 ## MinMax
-strat = "m"
-Il joue en prevoyant 2 coup d'avance avec la strategie minmax en éliminant les branches unitil à dévlopper.
+strat = "m"  
+Il joue en prevoyant 3 coup d'avance avec la strategie minmax en éliminant les branches inutile à dévlopper.
 Il choisi sont coup en fonction de le fonction heuristic. 
-### heuristic
-la valeur que retourne heuristique dépend
-* de la différence de point entre l'adversaire et le joueur
-* le nombre de pion inretournable du joueur
 
 # bibliothèque utilisé
 * random : pour les coup aléatoire
 * json et socket : pour communiquer avec le serveur
 * threads : pour pouvoir lancer plusieur AI en même temps
+* defaultdict from collections : pour garder en memoire les coups pour la strategie "negamax a profondeur variable"
+* time : pour prendre en compte le temps pour la strategie "negamax a profondeur variable"
+* asyncio : pour pouvoir recherche dans l'arbre tout en regardant le temps pour la "strategie negamax a profondeur variable"
