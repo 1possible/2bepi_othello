@@ -1,4 +1,5 @@
 # 2bepi_othello
+matricule = [21258,20242]
 # Stratégie utilisé
 ## negamax avec profondeur variable
 strat = "i"  
