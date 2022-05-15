@@ -7,10 +7,12 @@ import argparse
 import AIStrat
 import First_strategy
 
+withThread= True
+
 class AICom:
     run = True
 
-    def __init__(self,port,name,strat ="i",matricules=['21258','20242']):
+    def __init__(self,port,name,strat ="i",matricules=['21258','20242'],servor='127.0.0.1'):
         #fonction qui initialise les variables du programme et lance l'inscription
         # port = le port sur lequel le program va écoute pour les request du serveur
         # name = "justUnTest"
@@ -23,7 +25,7 @@ class AICom:
         self.name = name
         self.matricules = matricules
         self.strat =strat
-        self.adresseServeurRunner = ('127.0.0.1', 3000)
+        self.adresseServeurRunner = (servor,3000)
         self.adresse = ('0.0.0.0',self.port)
         if self.strat != "t":
             self.inscription()
@@ -42,8 +44,11 @@ class AICom:
         if 'response' in reponseInscription.keys():
             if reponseInscription['response'] == 'ok':
                 print(self.name + " inscription OK \n")
-                self.threadEcoute = th.Thread(target = self.ecoute)
-                self.threadEcoute.start()
+                if withThread:
+                    self.threadEcoute = th.Thread(target = self.ecoute)
+                    self.threadEcoute.start()
+                else:
+                    self.ecoute()
             if reponseInscription['response'] == 'error':
                 print(self.name + "inscriptionError : "+reponseInscription['error'])
 
@@ -52,27 +57,31 @@ class AICom:
         #repond a ping par pong
         #lance play quand il recoit la requet move
         with socket.socket() as sAIServor:
+            sAIServor.settimeout(1)
             sAIServor.bind(self.adresse)
             sAIServor.listen()
             while self.run:
-                clientRunner, adresseRunner = sAIServor.accept()
-                messageServor = clientRunner.recv(2048).decode()
                 try:
-                    mServor = json.loads(messageServor)
-                except:
-                    print(self.name+ "imposible de convertir message en JSON")
+                    clientRunner, adresseRunner = sAIServor.accept()
+                    messageServor = clientRunner.recv(2048).decode()
+                    try:
+                        mServor = json.loads(messageServor)
+                    except:
+                        print(self.name+ "imposible de convertir message en JSON")
 
-                if 'request' in mServor.keys():
-                    if mServor['request'] =='play':
-                        clientRunner.send(json.dumps(self.play(mServor)).encode())
-                    if mServor['request'] =='ping':
-                        clientRunner.send(json.dumps({'response': 'pong'}).encode())
-                        print(self.name+' PING PONG')
-                #if 'reponse' in reponse.keys():
-                #    if reponse['reponse'] == 'ok':
-                #        print("OK")
-        #        if reponse['reponse']== 'ping':
-        #            self.s.send(json.dumps({'reponse':'pong'}).encode())
+                    if 'request' in mServor.keys():
+                        if mServor['request'] =='play':
+                            clientRunner.send(json.dumps(self.play(mServor)).encode())
+                        if mServor['request'] =='ping':
+                            clientRunner.send(json.dumps({'response': 'pong'}).encode())
+                            print(self.name+' PING PONG')
+                    #if 'reponse' in reponse.keys():
+                    #    if reponse['reponse'] == 'ok':
+                    #        print("OK")
+            #        if reponse['reponse']== 'ping':
+            #            self.s.send(json.dumps({'reponse':'pong'}).encode())
+                except socket.error:
+                    pass
     def play(self,dicGame):
         #fonction qui s'occupe de renvoyé une reponse de la request move sous forme de dictionnaire
         #exemple dicGame
@@ -117,12 +126,15 @@ class AICom:
 
 #pour lance le programme depuis le terminal
 #due au tread qui a pas de fin (fonction bloquante)
-#if __name__ == "__main__":
-#    parser = argparse.ArgumentParser()
-#    parser.add_argument('AIName', help='The name of the game')
-#    parser.add_argument('-p', '--port', type=int, help='The port the program use to listen for request from the serverRunner', default=3000)
-#    parser.add_argument('-AI', '--aiStrat', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax', default='m')
-#    parser.add_argument('-s', '--servor', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax', default='127.0.0.1')
-#    args = parser.parse_args()
+#_init__(self,port,name,strat ="i",matricules=['21258','20242'],servor='172.17.33.221'):
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-n','--AIName',type=str, help='The name of the AI',default="Roversi")
+    parser.add_argument('-p', '--port', type=int, help='The port the program use to listen for request from the serverRunner', default=8888)
+    parser.add_argument('-AI', '--aiStrat', type=str, help='strategie que utilisera L\'ia (\'a\': aleatoire, \'m\'= minmax avec profondeur limité ,\'f\'= firstcoup,\'n\'=strategie du moins de coup,\'i\'= minmax avec profondeur itératif', default='i')
+    parser.add_argument('-s', '--servor', type=str, help='adresse du sevrveur ChampionshipRunner', default='127.0.0.1')
+    args = parser.parse_args()
 
-#    AICom(args.port, args.AIName, args.aiStrat, args.servor)
+    withThread=False
+
+    AICom(port=args.port,name= args.AIName, strat=args.aiStrat, servor=args.servor)
