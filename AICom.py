@@ -67,7 +67,7 @@ class AICom:
                     try:
                         mServor = json.loads(messageServor)
                     except:
-                        print(self.name+ "imposible de convertir message en JSON")
+                        print('ERROR: '+self.name+ " impossible de convertir le message du serveur en JSON")
 
                     if 'request' in mServor.keys():
                         if mServor['request'] =='play':

@@ -292,36 +292,49 @@ def heuristic(board):
 	if gameOver(board):
 		if len (board[0]) > len (board[1]):
 			return float("inf")
-		else: 
+		else:
 			return float ("-inf")
 	h=0
 	coefDifMove = 0
 	if len(board[0])+len(board[1]) <7:
 		coefDifPion = 0
-		coefDifMove = 2
+		coefDifMove = 4
+		coefNextMove = -1
 	elif len(board[0])+len(board[1]) <15:
 		coefDifPion = 0
-		coefDifMove = 2
+		coefDifMove = 3
+		coefNextMove = -1
 	elif len(board[0])+len(board[1]) <45:
 		coefDifPion = 1
 		coefDifMove = 3
+		coefNextMove = 0
 	elif len(board[0])+len(board[1]) <50:
 		coefDifPion = 3
+		coefNextMove = 0.5
 	elif len(board[0]) + len(board[1])< 55:
 		coefDifPion = 4
+		coefNextMove = 0.5
 
 	else:
 		coefDifPion = 6
+		coefNextMove = 0.25
 	h += (len (board[0]) - len(board[1]))* coefDifPion
 	pionIntouchable = 0
 	for pion in board[0]:
-		if(AIStrat.pionIntouchable(pion,board)):
+		if pion in [0, 7,56,63]:
+			pionIntouchable+=6
+		elif(AIStrat.pionIntouchable(pion,board)):
 			pionIntouchable+=1
 	for pion in board[1]:
-		if(AIStrat.pionIntouchable(pion,board)):
+		if pion in [0, 7,56,63]:
+			pionIntouchable-=6
+		elif(AIStrat.pionIntouchable(pion,board)):
 			pionIntouchable-=1
 	h+=pionIntouchable*7
-	h+= (len(AIStrat.movePossibles(board)[0])-len(AIStrat.movePossibles([board[1],board[0]])[0]))*coefDifMove
+	movesJ =AIStrat.movePossibles(board)
+	movesAdv = AIStrat.movePossibles([board[1],board[0]])
+	h+= (len(movesJ[0])-len(movesAdv[0]))*coefDifMove
+	h+= (sum(movesJ[1])-sum(movesAdv[1]))*coefNextMove
 	return h
 
 
@@ -333,9 +346,9 @@ def stratIterative(board):
 		message = "^^"
 	elif score == float("-inf"):
 		message = "X( <bien joué>"
-	elif score >50:
+	elif score >100:
 		message = ":D"
-	elif score <-50:
+	elif score <-100:
 		message = ">:("
 	elif score >0:
 		message = ":)"
