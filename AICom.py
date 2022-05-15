@@ -17,9 +17,13 @@ class AICom:
         # port = le port sur lequel le program va écoute pour les request du serveur
         # name = "justUnTest"
         # matricules = ["12345", "67890"] #obliger d'avoir different matricule pour plusieur client
-        # strat = char qui dit quelle strategie utilise
+        # strat = char qui dit quelle strategie utilise (plus d'info README)
         #           "a"=aleatoire
         #           "m"=MinMax
+        #           "i"=negamax avec profondeur iterative
+        #           "f"=firstcoup
+        #           "n"=strategie du moindre coup
+        #servor = adresse du serveur championshipRunnner
         #idée: faire des fonction pour verifier que les parametres sont dans le bon format
         self.port = port
         self.name = name

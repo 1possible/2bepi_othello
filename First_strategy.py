@@ -287,7 +287,9 @@ def heuristic(board):
 # -> si partie pas fini donne un score qui depend
 #	->difference de pion
 #	->difference de pion intouchable
+#	->difference de coin
 #	->difference de coup possible
+#	->difference entre la somme des pions que le joueur et son adversaire peuvent faire
 
 	if gameOver(board):
 		if len (board[0]) > len (board[1]):
