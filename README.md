@@ -44,7 +44,9 @@ Elle utilise la stratégie MinMax (negamax) en regardant le plus loin dans l'arb
 la valeur que retourne heuristique dépend
 * de la différence de point entre l'adversaire et le joueur
 * le nombre de pion pas retournable du joueur et celui de son adversaire
+* le nombre de coin pris par son adversaire ou lui
 * le nombre de coup possible au prochain tour du joueur et de son adversaire
+* la somme des pion retournable par son adversaire ou lui au prochain tour
 
 # autre stratégie
 ## aléatoire a.k.a debilus
