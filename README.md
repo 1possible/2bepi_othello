@@ -19,7 +19,7 @@ python AICom.py -n Roversi
 ```
 valeur par defaut : "Roversi"
 #### la stratégie de l'ia
-la stratégie que va avoir l'ia lors des parties de othello. Pour plus d'information voir la partie ci-dessous : [Stratégie utilisé](https://github.com/1possible/2bepi_othello#strat%C3%A9gie-utilis%C3%A9) et [Autres Stratégies](https://github.com/1possible/2bepi_othello#autre-strat%C3%A9gie).
+la stratégie que va avoir l'ia lors des parties de othello. Pour plus d'information voir la partie ci-dessous : [Stratégie utilisé](#strat%C3%A9gie-utilis%C3%A9) et [Autres Stratégies](#autre-strat%C3%A9gie).
 ```shell
 python AICom.py -AI i
 ```
@@ -63,12 +63,12 @@ Si il y a un coup possible qui est un coin ou si il peut placer un pion imprenab
 ## MinMax
 strat = "m"  
 Il joue en prevoyant 3 coup d'avance avec la strategie minmax en éliminant les branches inutile à dévlopper.
-Il choisi sont coup en fonction de le fonction heuristic. 
+Il choisi sont coup en fonction de le fonction [heuristic](#heuristic). 
 
 # bibliothèque utilisé
 * random : pour les coups aléatoires
 * json et socket : pour communiquer avec le serveur
 * threads : pour pouvoir lancer plusieur AI en même temps
-* defaultdict from collections : pour garder en memoire les coups pour la strategie [negamax avec profondeur variable](https://github.com/1possible/2bepi_othello#negamax-avec-profondeur-variable)
-* time : pour prendre en compte le temps pour la strategie [negamax avec profondeur variable](https://github.com/1possible/2bepi_othello#negamax-avec-profondeur-variable)
-* asyncio : pour pouvoir recherche dans l'arbre tout en regardant le temps pour la strategie [negamax avec profondeur variable](https://github.com/1possible/2bepi_othello#negamax-avec-profondeur-variable)
+* defaultdict from collections : pour garder en memoire les coups pour la strategie [negamax avec profondeur variable](#negamax-avec-profondeur-variable)
+* time : pour prendre en compte le temps pour la strategie [negamax avec profondeur variable](#negamax-avec-profondeur-variable)
+* asyncio : pour pouvoir recherche dans l'arbre tout en regardant le temps pour la strategie [negamax avec profondeur variable](#negamax-avec-profondeur-variable)
