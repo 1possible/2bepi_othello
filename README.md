@@ -1,3 +1,4 @@
+[![Run Tests](https://github.com/1possible/2bepi_othello/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/1possible/2bepi_othello/actions/workflows/test.yml)
 # 2bepi_othello
 matricule = [21258,20242]  
 IA pour jouer à othello avec le [ChampionShipRunner](https://github.com/qlurkin/PI2CChampionshipRunner).
