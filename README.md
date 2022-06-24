@@ -36,7 +36,7 @@ permet de lancer facilement plusieur AI à la fois.
 Il suffit juste de retirer le # devant les AI que l'on veut connecter. 
 Par defaut, il n'y a que "Roversi" activé.  
 ATTENTION de ne pas lancer ia "Roversi" en même temps par first.py et par ligne de commande si les paramètre son laisser par défaut.
-# Stratégie utilisé
+# Stratégie utilisée
 ## negamax avec profondeur variable
 strat = "i"  
 [Conseillé]  
@@ -68,7 +68,7 @@ strat = "m"
 Il joue en prevoyant 3 coup d'avance avec la strategie minmax en éliminant les branches inutile à dévlopper.
 Il choisi sont coup en fonction de le fonction [heuristic](#heuristic). 
 
-# bibliothèque utilisé
+# bibliothèque utilisée
 * random : pour les coups aléatoires
 * json et socket : pour communiquer avec le serveur
 * threads : pour pouvoir lancer plusieur AI en même temps
